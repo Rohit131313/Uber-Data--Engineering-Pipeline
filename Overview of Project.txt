@@ -1,0 +1,424 @@
+Overview of Project
+In this project we will be taken the dataset of uber then we will build a data model in fact and in dimension format and write our transformation code in python . This code will be deployed on google cloud where we will install mage (in which we load , transform , load data in bigquery in virtual machine ) which is open source data pipeline tool . We will load our data into the bigquery (using mage) that is a data warehouse and create our final dashboard
+
+Archeiteture of Project
+We will have our data stored into the google cloud storage which is like object storage , then we will write our transformation logic in python and deploy our code onto the open source data pipeline tool which is a Mage and then we will load the data onto the big query which is the data warehouse available on GCP.And then we will build our final dashboard onto the local studio.
+
+What is GCP?
+Google Cloud Platform (GCP): An Overview
+
+Google Cloud Platform (GCP) is a comprehensive suite of cloud computing services offered by Google. It serves as a robust infrastructure for businesses and developers to build, deploy, and scale applications in the cloud. Similar to Amazon Web Services (AWS) and Microsoft Azure, GCP provides a diverse set of services, including computing, storage, databases, machine learning, networking, and more.
+
+Key GCP Services:
+
+Compute Engine: Offers virtual machines running on Google's infrastructure.
+App Engine: A fully managed platform for application development and deployment.
+Google Kubernetes Engine (GKE): Managed Kubernetes service for container orchestration.
+Cloud Storage: Object storage service for efficient data storage and retrieval.
+BigQuery: Serverless data warehouse for analytics and data processing.
+Cloud SQL: Fully managed relational database service.
+Cloud Spanner: Globally distributed and horizontally scalable database service.
+Cloud AI: Suite of machine learning services, including pre-trained models and custom model development.
+Cloud Networking: Services for networking, load balancing, and content delivery.
+Identity and Access Management (IAM): Security and access control for GCP resources.
+
+
+GCP Servies which we will be using in this project
+Cloud Storage 
+Google Cloud Storage is an online file storage service provided by Google as part of its cloud computing platform. It allows you to store and retrieve your data in the cloud , making it accessible from anywhere with an internet connection
+
+Compute Engine 
+Google Compute Engine is a cloud computing service that provide virtual machines for running application and services. It allows you to easily create, configure ,  and manage virtual machines with various operating systems and hardware configurations.
+
+BigQuery
+BigQuery is a cloud-based data warehouse provided by gcp that allows you to store, analyze ,  and query large datasets using SQL like syntax. It is a serverless, highly scalable , and cost-effective solution that can process and analyze terabytes to petabytes of data in real-time
+
+Looker
+Looker Studio is a web-based data visualization and reporting tool that allows you to create interative dashboards and reports from a variety of data sources, including Google Analytics,Google Sheets,and BigQuery. It enables you to turn your data into informative and engaging visualization, which can be easily shared and collaborated on with others.
+
+How we will be using the above GCP services in our project ?
+Cloud Storage
+It is simlar to S3 storage of Aws and we call it as google cloud storage in gcp , which is a objcet storage where you store all the different types of files . So all the data that we get , we will store our files onto the Google cloud storage
+
+Compute Engine 
+It is similar to ec2 machine of aws and we call it as compute engine in gcp , so it is kind of like your online computer where you can write your code , deploy it and do other things. So we will be deploying our mage instance onto the compute engine and then we will deploy our code on top of that so we will create our data pipeline on mage
+
+BigQuery
+It is a cloud based data warehouse provided by gcp can easily store your data, analyze and run large set of quaries using SQL only. So this is where we will write our basic SQL query and try to analyse our data and at the end we have the local studio earlier. This used to known as data studio
+
+Looker
+Nowadays , they combine the looker and the data studio and created the new tool , this is kind of like the BI tool you see in the market such as Power BI . This is similar to that . Using this we will create dashboard visualize different components and publish it and share it with the user 
+
+Mage 
+Open-source data pipeline tool for transformaing and integrating data
+It is similar to airflow but it has more functionality where the airflow lags . So, simily we can say instead of airflow we are using mage in this project.
+Okay but what is the actual need of airflow and mage in data engineering pipelines?
+We use airflow or mage in data engineering pipeline since they provide tools and frameworks to desgin,schedule,and moniter complex data workflows.
+Use of mage instead of airflow ?
+-> Mage provide the functionality of airflow and also those functionality where the airflow lags
+-> Mage have one website () , and mage is much more easier and interactive than airflow because this focuses on core problem . So, if you want to load your data , you can just get the code template and just load your data using API. Then,if you want to transform your data, you can write your transform logic and load your data on to target location . You will get all the code templates . On using mage instead of airflow , all you need to do focus on writing your logic and then get the template of code the work you want to with data after logic applied on data and then everthing will be handled by these modern data engineering tools so explore it . And we will get to know about this as we move forward
+
+Fact Table and Dimension Table
+Fact Table
+-> Contains quantitative measures or metrices that are used for analysis
+-> Typically contains foreign keys that link to dimension tables
+-> Contains columns that have high cardinality and change frequently
+-> Contains columns that are not useful for analysis by themselves, but are necessary for calculating metrics
+
+Dimesion Table
+-> Contains columns that describe attributes of the data being analyzed
+-> Typically contains primary keys that links to fact tables
+-> Contains columns that have low cardinality and don't change frequently
+-> Contains columns that can be used for grouping or filtering data for analysis
+
+What is the use of these tables in our project?
+Because once we get our dataset , we want / have to convert our flat file into the fact table and dimension table .
+
+Explain in detail how flat files are converted to flat table and dimension table ?
+The data we get is in format of flat file and contain lots of information out of which some information remain static for longer time like product name ,product description are put in dimesion table and the it also have the bunch of information which is generally changing in small interval of time are put in fact table like no. of order placed today, number of return order today and so on.
+
+In fact table what to do you mean by metrices or uantitative measure ?
+Let's take the example of ecommerce platform like amazon . Let's you are working in the amazon , the key metrices will be , let's say the total number of products that got shipped today , total number of product return today . So, these are the quantitative measures and this give us the overall picture about what is happening . So generally we put all of these numerical or transactional value inside the fact table so it mainly contains the high cardinality and changing frequency. To understand the revenue , order numbers . All of these are keeps changing as we receive more and more input from the users . So, generally we put all of these information inside the fact table
+
+In dimension table what it mean by desciption based attributes ? 
+While considering the previous example ,  these are such as product name, product description . All of these are static and do not change for the loger period of time . So, instead of putting all those information inside the fact table  we put them onto the dimension table and join them based on the foreign keys and whenever we need we can link the information of both the table like the in pictue (Fact and Dimension Table) in fact table we have one information "data_id" which is like the key to the dimesion table "Dates" which show date of birth of user , dob will be different for different user but the month,year,quater of particular user remain same for longer period of time so put in dimensional table . So, that when we search for dob by customer_id in fact table (Orders) in fact table in use data_id as link to get the data of dimensional table "Dates" .We can put directly the dob of user in fact table then why we put dob in dimension table and link that dimension table with fact table ? Because to avoid duplication of dob of different user in fact table as it is possible that different users can have same dob and to make less messy the data of fact table 
+
+Always ,whenever you get the data , first figure out what the each column of data specify -> you can see this by seeing data dictionary of data ( You can find the data dictionary of data used in this project in project directory named as (data_dictionary_trip_records_yellow))
+
+Then continue in jupyter notebook for making fact table and dimension table 
+
+Now , Let's start with goggle cloud 
+-> open the goggle cloud website 
+-> make new project using the button at top (button as "My First Project")
+-> then click the button to "new project"
+-> name the project and write the description of project 
+-> then click create
+-> to open any project simply again click the same button at top -> get the list of project -> click the project name which you want to open
+
+Once open your project and now according to project archeitature 
+
+-> search for cloud storage , it is similar to s3 storage of aws , means it also have bukets to store data
+-> then make the bucket if want or you can also use the existing bucket for storage
+
+-> to create the bucket -> click the button "create" -> fill the details (like the name of bucket, location ->click "multi-region" , inside it click location for asia or you can select "Region" and select the particular region near you to store data, chosse a storage class of data either autoclass or select the class of storage according to the need and mark other option according to need ) and create the buckect by clicking the button "create" , and remeber your bucket name should be unique across the globe
+
+-> after clicking the create button one popup come there unselect "Enforce public access prevention on this bucket" so that bucket can be selected publically and we can access it in our code so directly change it access by three dot of that bucket in bucket list but before change the access control to fine-grained as discuss in next point
+
+-> then from the list of buckets go to inside the bucket by clicking it's name in which you want to store data of project
+-> in the bucket we form -> click "upload files"-> upload the uber_data.csv file -> but as file get uploaded we can see that file access is not public , so we need to make it public as we directly access this file url in our code -> to make it public there is the three dot icon in same row of file click that -> click edit access ( but before this make the access control from "uniform" which we set while creating bucket to "Fine-grained" , do this by going inside the permission section and select the "Edit access control" and then change the it from uniform to fine-grained ) -> click add entry fill Entity 1 -> Public , Name 1 -> allUsers , Access 1 -> Reader -> then click save
+
+-> then there is one new column named as "Version history" in list of file inside bucket come which store the url of particular file using which we can access the data directly from that url only 
+You can copy the url by clicking the Copy URL -> now opening this url on browser that particular file will get automatically get downloaded 
+
+Now we have to deploy the Maze (like airflow) on compute engine (like ec2 of aws) in goggle cloud as per the archeitature of our project ,  for this follow these steps
+-> search "Compute Engine" at home page of goggle cloud
+-> then do right click on it and click open in new tab
+-> similar way as we made the instance of ec2 machine , make the instance here to by clicking the "create instance" button at top 
+-> give the name to instance , select the region near you and zone , in machine configuration -> series as E2 , in machine type -> click the box where have to enter then select ths "Standad" and select option from drop down list of "4 cpu and 16GB memory" then remain all things same or if want change the things according to need but remeber in firewall section select the both options ie,  Allow HTTP traffic and Allow HTTPS traffic and Allow Load Balancer Health Checks -> then click create , so that instance get created
+-> it take some time and once you your instance get created there is the "Connect" column then click the SSH of that instance in connect column , which will open the new window using which you can access your instance (or virtual machine maded mow) and this is the same window we get in aws for ec2 machine by using the key pair of instance in putty ie, this is the terminal of that virtual machine we made and we have to do all the things in that machine using this terminal only
+then use the following commands in the terminal of virtual machine
+-> sudo apt-get update -y , to update all the packages present in this virtual machine
+-> sudo apt-get install python3-distutils
+   sudo apt-get install python3-apt
+as we want python so above two commands will install all the required dependency of python in virtual machine
+-> sudo apt-get install wget
+   wget https://bootstrap.pypa.io/get-pip.py
+   sudo python3 get-pip.py 
+so that we can use the "pip3" not "pip" to install other packages 
+
+REMEBER WHENEVER YOU ARE INSTALLING ANYTHING , ALWAYS USE THE "sudo" AS PREFFIX OF COMMAND 
+LIKE, sudo pip3 install pandas
+
+Now we have to install maze in this virtual machine
+for this ,
+-> go to website mage.ai 
+-> there select the button "Start building" , to open the github repository of mage , then scroll down in readme file you get the detail procedure of installing the maze 
+-> there you see either you can install it by docker if you have install the docker in your virtual machine or we can use  pip command to install  it 
+-> but if in readme file command of pip is given as "pip install mage-ai" don't use this command in terminal of virtual machine to download the maze in it use this command "sudo pip3 install mage-ai" ie, add preffix as sudo and use pip instead of pip3
+-> to start/launch  the mage in your project use this command "mage start name_of_project" this name of project not depend on name of bucket , name of instance we made , name of project we made in google cloud platform intially , you can give any name to it 
+->on running the mage project successfully we can see one message about the "localhost:6789" this is where we can see the ui of maze as same as we see the ui of airflow to see the dag , but we can't directly search localhost:6069 in our local device browser as maze is not running in our local device it is actually running on the virtual machine so intead of localhost we have replace the virtual machine or instance public ip/external ip address and then search in the browser of our local device ie , public_ip/external ip:6789 and to access the public ip of instance open the list of instances and then click the instance of which you want public ip click that instance and get it's public ip address
+-> but then also we are not able to access the ui of mage this is because our virtual machine/instance is not taking any request so we need to tell our instance that it should allow the request from this particular port ie,6789
+-> for this , go to list of instances -> click the instance you are working with -> scroll down to "network interfaces" there you see the name "nic0"  do right click to it and then open that in new tab -> over there you will find out the firewall and routes details , in this -> we need to create new rule for the port 6789 and tell the instance or virtual machine to allow the request from this port -> for this , see the left menu in that select Firewall -> then click the create firewall rule to crete new rule -> name the rule , write the description of rule , keep all other thing same and if needed change accordingly , in targets select "all instances in the networks" -> in source filter select "IPV4 ranges" -> in source ipv4 ranges we write "0.0.0.0/0and click enter it means all the ip (it is actually the any device ip which can send the request at this port to this instance ) in this case we are sending the requeset so techinally we have put have own local device ip but for general and not want to leak our ip we use 0.0.0.0 which means any device can send request to instance at particular port of rule -> then in Protocols and ports select Specified protocols and ports and select TCP and in Ports write 6789 ( means the port of which this instance will allow the request to it ) -> then click crete
+
+-> then once you can see the new firewall rule for this port in firwall and routes details then you will can access that ui of maze from your own browser
+
+
+-> THIS IS THE SAME WAY WHAT WE HAVE TO ACCESS THE ANY PORT FROM BROWSER OF LOCAL DEVICE RUNS ON VIRTUAL MACHIEN / INSTANCE
+
+-> Now you can see the name of project , ie, uber-data-engineering ,which we write while starting or lauching the mage 
+
+-> we will be creating the pipeline using the ui of mage which is different from airflow that in airflow we can not make the pipeline directly using the ui of airflow
+
+-> So to create pipeline , click the New button -> then click standard bash , as if we want to create the standard bash pipeline , and the mage we will have all of those things directly provided to us . We don't have to do a lot of things by ourself such as create the dags by writing code by yourself as like airflow, the modern data engineering tools like mage they already have the all of this functionality so they already give you the basic framework . All you have to do is just focus on writing your code and they will make sure that everything in place 
+
+-> our first task is to load the data in this mage ui , for this -> click the data loder->in python-> select api (so to get data from api and want to load that data in mage) how api? since we already genreated the public url for data which we can use as api 
+
+-> then after doing this give name to file and click save and add block and mage will generate the basic or sometime the required code and then if you want to modify the code you can also do this 
+
+-> now in code give the url of any api from which we want to access data, but in our case we use the url of data which is publically accessible ie, url of data stored in cloud storage
+You get this url inside the cloud storage-> uber wali bucket-> csv file wali ki url of public link which we made earlier
+
+-> on pasting the url and running the code by clicking the play button at the top , we will get the data or output of data in below window of code window
+
+-> You don't need to do anything by yourself , most of the time these tools are designed in a way that you just provide the different blocks and it will do all of those things for you
+
+-> Now as we load the data to mage from cloud storage our next step is to trasform this data based on the data model that we have created
+
+-> So for trasforming data we will scroll down there we see again all the option , select transformer -> put cursor on python -> select generic(or no template) template -> give the name to file and click save and add block
+
+-> Now the code block for transformation formed , in this you see one function called "transform" have argument as "data" and there is one comment about this data variable which is such that "data: The output from the upstream parent block" means data variable store the data or output of previous task ie, loading of data ,and you can easily see the parent of any task or the sequence of task to happen in right side window ie, tree window also 
+
+-> since the previous task is loading of data which give output as dataframe of data so instead of "data" variable we change the variable name as "df" in code 
+
+-> Now , the code for trasformation , ie, transforming data into fact and dimension table according to data model , we written earlier .We simply copy and paste that code here 
+
+-> paste the code below the comment you can see as "# Specify your transformation logic here" and also  import pandas at top of file as for transformation our code needs the pandas package in use
+
+-> MEANS WHENEVER WE NEED TO WRITE CODE BY OURSELF FOR ANY SERVICE WE HAVE TO USE THE GENERIC TEMPLATE OR NO TEMPLATE OF THAT SERVICE AND THEN WRITE LOGIC OF CODE IN THAT FILE BY OURSELF
+
+-> paste only changing to fact and dimension table remove the code of prenting the df and make all the code with perfect indent
+
+-> Code is like this # Specify your transformation logic here
+    df['tpep_pickup_datetime'] = pd.to_datetime(df['tpep_pickup_datetime'])
+    df['tpep_dropoff_datetime'] = pd.to_datetime(df['tpep_dropoff_datetime'])
+
+    df = df.drop_duplicates().reset_index(drop=True)
+    df['trip_id'] = df.index
+
+    datetime_dim = df[['tpep_pickup_datetime','tpep_dropoff_datetime']].reset_index(drop=True)
+    datetime_dim['tpep_pickup_datetime'] = datetime_dim['tpep_pickup_datetime']
+    datetime_dim['pick_hour'] = datetime_dim['tpep_pickup_datetime'].dt.hour
+    datetime_dim['pick_day'] = datetime_dim['tpep_pickup_datetime'].dt.day
+    datetime_dim['pick_month'] = datetime_dim['tpep_pickup_datetime'].dt.month
+    datetime_dim['pick_year'] = datetime_dim['tpep_pickup_datetime'].dt.year
+    datetime_dim['pick_weekday'] = datetime_dim['tpep_pickup_datetime'].dt.weekday
+
+    datetime_dim['tpep_dropoff_datetime'] = datetime_dim['tpep_dropoff_datetime']
+    datetime_dim['drop_hour'] = datetime_dim['tpep_dropoff_datetime'].dt.hour
+    datetime_dim['drop_day'] = datetime_dim['tpep_dropoff_datetime'].dt.day
+    datetime_dim['drop_month'] = datetime_dim['tpep_dropoff_datetime'].dt.month
+    datetime_dim['drop_year'] = datetime_dim['tpep_dropoff_datetime'].dt.year
+    datetime_dim['drop_weekday'] = datetime_dim['tpep_dropoff_datetime'].dt.weekday
+
+
+    datetime_dim['datetime_id'] = datetime_dim.index
+
+    # datetime_dim = datetime_dim.rename(columns={'tpep_pickup_datetime': 'datetime_id'}).reset_index(drop=True)
+    datetime_dim = datetime_dim[['datetime_id', 'tpep_pickup_datetime', 'pick_hour', 'pick_day', 'pick_month', 'pick_year', 'pick_weekday',
+                                'tpep_dropoff_datetime', 'drop_hour', 'drop_day', 'drop_month', 'drop_year', 'drop_weekday']]
+
+    passenger_count_dim = df[['passenger_count']].reset_index(drop=True)
+    passenger_count_dim['passenger_count_id'] = passenger_count_dim.index
+    passenger_count_dim = passenger_count_dim[['passenger_count_id','passenger_count']]
+
+    trip_distance_dim = df[['trip_distance']].reset_index(drop=True)
+    trip_distance_dim['trip_distance_id'] = trip_distance_dim.index
+    trip_distance_dim = trip_distance_dim[['trip_distance_id','trip_distance']]
+
+    rate_code_type = {
+        1:"Standard rate",
+        2:"JFK",
+        3:"Newark",
+        4:"Nassau or Westchester",
+        5:"Negotiated fare",
+        6:"Group ride"
+    }
+
+    rate_code_dim = df[['RatecodeID']].reset_index(drop=True)
+    rate_code_dim['rate_code_id'] = rate_code_dim.index
+    rate_code_dim['rate_code_name'] = rate_code_dim['RatecodeID'].map(rate_code_type)
+    rate_code_dim = rate_code_dim[['rate_code_id','RatecodeID','rate_code_name']]
+
+    pickup_location_dim = df[['pickup_longitude', 'pickup_latitude']].reset_index(drop=True)
+    pickup_location_dim['pickup_location_id'] = pickup_location_dim.index
+    pickup_location_dim = pickup_location_dim[['pickup_location_id','pickup_latitude','pickup_longitude']] 
+
+
+    dropoff_location_dim = df[['dropoff_longitude', 'dropoff_latitude']].reset_index(drop=True)
+    dropoff_location_dim['dropoff_location_id'] = dropoff_location_dim.index
+    dropoff_location_dim = dropoff_location_dim[['dropoff_location_id','dropoff_latitude','dropoff_longitude']
+
+    payment_type_name = {
+        1:"Credit card",
+        2:"Cash",
+        3:"No charge",
+        4:"Dispute",
+        5:"Unknown",
+        6:"Voided trip"
+    }
+    payment_type_dim = df[['payment_type']].reset_index(drop=True)
+    payment_type_dim['payment_type_id'] = payment_type_dim.index
+    payment_type_dim['payment_type_name'] = payment_type_dim['payment_type'].map(payment_type_name)
+    payment_type_dim = payment_type_dim[['payment_type_id','payment_type','payment_type_name']]
+
+    fact_table = df.merge(passenger_count_dim, left_on='trip_id', right_on='passenger_count_id') \
+             .merge(trip_distance_dim, left_on='trip_id', right_on='trip_distance_id') \
+             .merge(rate_code_dim, left_on='trip_id', right_on='rate_code_id') \
+             .merge(pickup_location_dim, left_on='trip_id', right_on='pickup_location_id') \
+             .merge(dropoff_location_dim, left_on='trip_id', right_on='dropoff_location_id')\
+             .merge(datetime_dim, left_on='trip_id', right_on='datetime_id') \
+             .merge(payment_type_dim, left_on='trip_id', right_on='payment_type_id') \
+             [['trip_id','VendorID', 'datetime_id', 'passenger_count_id',
+               'trip_distance_id', 'rate_code_id', 'store_and_fwd_flag', 'pickup_location_id', 'dropoff_location_id',
+               'payment_type_id', 'fare_amount', 'extra', 'mta_tax', 'tip_amount', 'tolls_amount',
+               'improvement_surcharge', 'total_amount']]
+
+-> then make return data to return "success" and print(fact_table), on running the file you get the fact_table as output , it means all work good
+And if you are not getting any output means some error is coming check the following things for that , -> is you change the variable name from data to df in argument of function "transform" , -> check your terminal of virtual machine that it should not stop , if it stop , then again start the mage with same project name 	REMEBER TO START MAGE WITH SAME PROJECT NAME then run all the parent block of mage then run again this block of code , why we have to run the parent block of code? because in mage the output of parent block of code goes to child block of code and so on , to see the parent blocks see the tree structure of block of code in  mage in tree window
+
+-> Upto this as you can also see the tree structure that first we load the data from api(link of data file store in cloud storage) and then trasform this loaded data into different df of fact and dimension table
+Now we have to pass this multiple dataframe to looder function and  load this data to the bigquery and for this we will pass it in the dictionary such that key of dictionary as dataframe name and value as dictionary format of particular dataframe
+comment the print statement of fact table and remove the return "success" and return this 
+return {"datetime_dim":datetime_dim.to_dict(orient="dict","passenger_count_dim":passenger_count_dim.to_dict(orient="dict"),"trip_distance_dim":trip_distance_dim.to_dict(orient="dict"),"rate_code_dim":rate_code_dim.to_dict(orient="dict"),"pickup_location_dim":pickup_location_dim.to_dict(orient="dict"),"dropoff_location_dim":dropoff_loaction_dim.to_dict(orient="dict"),"payment_type_dim":payment_type_dim.to_dict(orient="dict"),"fact_table":fact_table.to_dict(orient="dict")}
+
+We are changing the dataframe into dictionary format by using (.to_dict(orient="dict") as we can't directly pass the df into dictionary format 
+This approach allows you to encapsulate and organize the output data in a structured manner.
+
+-> Now to load the data into the bigquery we use another block of code called "Data exporter" , this is done as we load our data from api* and then transform that data according to data model in tranform function and then pass the transform code in dictionary and receive that data and load that data onto the bigquery 
+
+-> Scroll Down there you see the multiple block of mage ->Click Data exporter -> click over Python -> select the google bigquery to load data over it -> then give the name of block and click save and add block
+
+-> now we get the block of code , in this you see the config_path which have cofigure with the io_config.yml file and if you see the config.yaml file in left menu , this config.yaml file contains the credienticals to connect to bigquery
+So,generally in any cloud computing platoform , you need some kind of access key or secreat key or the credentials to connect to that particular service.
+On opening that config.yaml file you can see the the variable for access key for all the cloud computing like , aws,azure,goggle cloud .What we need to do is , we have to get the google cloud access key or secreate key and paste that in the variable of google in config.yml file ie, GOOGLE_SERVICE_ACC_KEY so that this file can be used be data exporter to access the google cloud and can load the data in google cloud 
+
+-> for the secreat key in google cloud  -> go to consle or home page of google cloud and search "API & Service" and then open it -> then click  Credential in left menu where you get the credential for the bigquery -> click create creditials at the top -> then click service account , so creating a service account basically means you are giving the permision to communicate the vm or virtual machine with all the other gcp services -> give name to service account , give description and click create and continue -> then select role , as in this case we need to access the big query so select role as "BigQuery Admin" it is same as we select the iam role in aws to acceess the particular service of aws inside the virtual machine or instances -> the click continue -> then click done 
+
+-> Now go to this service accound you made by clicking it is name from list of service account name in home page of API & Services
+
+-> then go to keys page -> click add key button -> click create new key ->click json and create, then it will give you one json file which downloaded automatically which store all the credentical information 
+
+-> now go to mage -> in config.yaml file -> paste all these credentical in variable GOOGLE_SERVICE_ACC_KEY according to the  variable config file have and save that file by Ctrl+S -> then click the View pipeline at the top
+
+-> Intially , we do loading of data to bigquery for one table/dataframe coming from the transform data block as output and then we will do it for all the different dataframes that we have available let us we do for fact table 
+
+-> First open the Big Query in google cloud console by serching it -> in left menu see for the project name we made at very starting of project -> click three dots of the name of project and click create dataset -> give name to it and select the multi region in location type as we want to access our data from all the of these different regions -> in multi region select us america -> then click create dataset (we create the dataset with name as uber_data_engineering)
+
+ table_id = 'your-project-id.your_dataset.your_table_name'
+ table_id = 'uber-data-408318.uber_data_engineering.fact_table'
+project name id-> uber-data-408318 (can see inside the bigquery in google cloud)
+dataset name ->uber_data_engineering
+table name-> fact_table 
+
+-> This is all about the table and configure the google cloud with yaml file and second thing is to pass the data , as in another fucntion we are already using the if_exist =replace means if the particular file is already exist it simply replace table as it is , we don't want to append any data because in this we don't have the data coming continually because we don't have the data which is coming continuously 
+
+MEANS FOR REALTIME DATA THERE WILL BE THE LOGIC TO APPEND THE DATA TO EXISTING DATA OF TABLE CONTINUOUSLY 
+
+And the df there is the actual data we want to store so we want to pass the data frame , but you can see that the transform block or transform function is giving data in json format as output which is coming to this data explorer as df but we need data in dataframe format not in json format so we need to pass convert this json data into dataframe and for this we do conversion while reading the data , and also change the df variable to data in argument of above function and also below where df is been used since data is default variable to understand that store data which is actually the output of previous block of code , so why we change data variable to df in transformation block of code because as our code of transformatioin is written for df so if we use only the data variable then we have to change the df to data in our transformation logic of code
+
+-> so we use data['fact_table'] instead of data so that we can select the value of key = fact_table in data getting from previous block of code of mage ie, transformation block , as the value of that is acually the dataframe in form of dictionary , it means we also have to convert this dictionary format to dataframe to so we use , pd.DataFrame(data['fact_table']) if you have imported pandas as pd 
+and if you import pandas from DataFrame , then use DataFrame(data['fact_table']) only
+
+-> But on runnig the file we got error of not getting google.cloud module , means we have to install google cloud in our virtual machine or instance but don't stop the mage server in terminal and instal google cloud otherwise mage will stop simply open another terminal window of virtual machine as same way and install google cloud in that terminal 
+use this commnad "sudo pip3 install google-cloud"
+also install bigquery in it as we are also working with bigquery using the command "sudo pip3 install google-cloud-bigquery"
+Now run the file of data exporter now it runs fine
+
+-> Now , go to the bigquery in google cloud on chrome and there in inside the dataset (by clikcing the arrow butoon left of name of dataset) you can see the table "fact_table" with all the data in fact_table , you can see by clicking it and going inside the preview
+
+-> Now, we did for one table or dataframe ie, fact_table and now we have to do same thing for all the dataframe we getting from the output of parent of this data exporter block ie, from the transformer block . So, that all the dataframes get load on the bigquery
+For this , change this 
+table_id = 'uber-data-408318.uber_data_engineering.fact_table' config_path = path.join(get_repo_path(), 'io_config.yaml')
+config_profile = 'default'
+BigQuery.with_config(ConfigFileLoader(config_path, config_profile)).export(
+            DataFrame(data['fact_table']),
+            table_id,
+            if_exists='replace',  # Specify resolution policy if table name already exists
+)
+
+to
+
+config_path = path.join(get_repo_path(), 'io_config.yaml')
+config_profile = 'default'
+    
+for key,value in data.items():
+        table_id = 'uber-data-408318.uber_data_engineering.{}'.format(key)
+    
+
+        BigQuery.with_config(ConfigFileLoader(config_path, config_profile)).export(
+            DataFrame(data[key]), ## or we can use DataFrame(value)
+            table_id,
+            if_exists='replace',  # Specify resolution policy if table name already exists
+        )
+
+-> Now on running this all the files which are present as dictionary format are converted to dataframe one by one and then put in biquery one by one , now you can see all the files in bigquery .
+And these files are the dataframe get from the after doing data modelling of original data 
+
+-> THERE IS ONE OBSERVATION 
+AS WE ALREADY LOAD THE FACT_TABLE BUT THE FACT_TABLE WILL GET LOAD AGIAN ON BIGQUERY AS WHEN WE LOAD ALL THE FILES ON BIGQUERY BUT ON SEEING IN BIGQUERY IN GOOGLE CLOUD IN CHROME YO WILL SEE ONLY FACT_TABLE IS PRESENT ON ONE TIME THIS IS DUE TO THE THING if_exists='replace' DUE TO THIS IT REPLACE THE FILE IF SAME NAME OF FILE IS ADDED IN BIGQUERY AND THIS IS ALSO USED WHEN WE DON'T WANT TO REPLACE THE FILE IF SAME FILE NAME IS ALREADY PRESENT WE HAVE TO APPEND WHICH IS GENERALLY DONE WHEN HAVE TO USE REALTIME DATA 
+
+-> How to apply queries of SQL on data of dataframe to do analysis ?
+For this you have make one new file in bigquery only when you opened any file to see there is plus sign present with the name of file click it to open new file where you can write queries on it 
+
+-> while using the sql queries you make sure to use the table id which you find in detail section on opening any table or file , instead of table name as we does in sql quaries
+
+-> Apply sql quaries to do analysis , there some question which you have to answer
+1. Find the top 10 pickup locations based on the number of trips
+2. Find the total number of trips by passenger count
+3. Find the average fare amount by hour of the day
+
+-> REMEBER WE STORE DATA IN BIGQUERY IN CASE OF GOOGLE CLOUD, INSIDE S3 IN CASE OF AWS , IN CASSANDRA IN CASE OF LOCAL DEVICE AND ALSO REMEBER THERE IS NO RELATION OF VIRTUAL MACHINE OR INSTACNCE AND THE DATABASE LIKE THE BIGQUERY IN THIS CASE , THIS ONLY THE PLACE WHERE WE PALCE THE DATA THROUGH ANY VIRTUAL MACHINE OR INSTANCE 
+
+-> Now we have done with loading of data , trasforming that data, loading that data into bigquery
+And Here the actual data engineering part is over her because we were able to extract this data clean that data by data model and put the pipeline in place and then we loaded our data onto big query
+
+-> Now after all this , the role of data scientist machine learning engineer , data analyst engineer starts -> they try to extract the information that they require and build a new table , we can call it as the analytic layer where they pull they columns that they require and then they build dashboards on top of it
+
+-> So we will be writing a quary to extract all of this data and combine them together
+we will be joining all the dataframe or table according to foregin key and primary key by seeing all the things in fact_table and then also printing all the columns or limited column on the basis of need 
+THIS IS HOW WE JOIN THE DIMENSION TABLE TO FACT TABLE 
+(Simply select the table by the table name)
+
+-> to store the data we get from query in different table in same dataset we use this "CREATE OR REPLACE TABLE `project_id.dataset_name.table_name` AS (## SQL Query);
+
+project_id.dataset_name.table_name -> project_id = project id of google cloud we made at very starting , this is given so that to specify in which project you have to save this table , dataset_name => dataset name of bigquery , this is given to specify in which dataset we have to save the table , table_name => this is given to specify the name of table in which we want that data should store
+
+-> to run the query click the run button present at top , then output will be presen in the window present below the window of above
+
+-> on running the query to create table you will see one table with nam tbl_analytics created in dataset and project id is specified and it contains all the data we get from the query pass inside the fucntion of creating table 
+
+-> NOW YOU WILL HAVE ONE QUESTION THAT IF WE WANT TO MERGE OF FILE WHICH IS ACTUALLY THE DATA WE HAVE INTIALLY THEN WHY WE BREAK THE INTIAL DATA INTO FACT AND DIMENSION TABLE ?
+ THEN I WILL SAY WE BREAK THE FILE FOR DOING THE DATA ENGINEERING PART IE, ONCE YOU LOAD ALL THE FILES IN BIGQUERY YOU WILL BE APPLYING THE QUERIES TO DO ANALYSIS ON IT AND IF WE HAVE THE DATA INTO FACT AND DIMENSION TABLE THEN WE CAN APPLY GOOD ANALYSIS ON DATA AS THEN WE KNOW WHICH INFORMATION IS DYNAMIC AND WHICH IS STATIC , AND THIS ANALYSIS IS SAME AS WE DONE PREVIOUSLY BY PANDAS AND ITS OTHER LIBRARY AS SAME WAY WE DO THE ANALYSIS BUT ONLY DIFFERENCE IS THAT IN THIS CASE WE WILL DO ANALYSIS BY APPKLYING THE SQL QUERIES AND AS WE HACE FACT AND DIMENSION TABLE THEN IT MEANS WE CAN MAKE GOOD QUESTION FOR ANALYSIS 
+AND NOW THE ANOTHER THING IS TO MERGING OF FILE , THIS IS THE ANOTHER ROLE OF ENGINEERING WHERE WE NEED THE ONE TABLE WITH WHOLE DATA AND IF WE HAVE THE INTIAL DATA WITH US IN DATASET THEN WE NO NEED TO DO THIS MERGING OF FILES , USING THIS TABLE WE WILL CREATE THE FINAL DASHBOARD OF DATA
+
+-> As we get the final table , and this step is called creating a analytical layer . Now, using this we will create the dashboard of this final data . 
+
+-> For creating the dashboard go to website of "looker studio" or perfect url for this is "https://lookerstudio.google.com/navigation/reporting" in this -> click blank report -> then you need to select your data source , in this case our data source is BigQuery so select BigQuery -> select the project name in google cloud which have that file in bigquery (this is the project name we have written at very starting) -> then select the dataset inside that project which store this table of which you want to make dashboard -> select table (in our case tbl_analytics) of which you want to make dashboard -> click add button -> click add to report button
+
+-> This is the local studio . This is where we can create our final dashboard . 
+
+-> Creating dashboard is depend to us , that what we have to put in dashboard
+
+-> At intial you get the random graph of the data you selected , delete that and rename the file as same as rename the jupyter notebook to "Uber Dashboard"
+
+-> Now, select the rectangle and made the rectange for heading at top and add the uber logo in that heading by adding the image by url or by uploading it from computer and you can also change the color of rectangle too
+
+-> We can design our dashboard as we need, but in this case (you can see the dashboard image in folder also or can see the dashboard on going the looker website)
+- we add the boder at top with logo
+- we add the filter so that we will be able to filter out the different graphs that we provide , so for this copy the above box and paste it below with some less height and right side of image icon you can see icon with A , which is used to werite the text in box
+- to show multiple filter we have multiple options , click the "Add a control" button at the top , click it and can select any thing you want in this case we select drop down list , you can control all these by the menu in right side ie, by changing the control field by any name of column in table
+- we make one summary box , inside the summary we will put some of the metrices so metrices can be average amount, average revenue , average trip distance -> for this click the add a chart button at the top , from there you can use multiple chart according to your need -> to edit anything we will use the right-side menu , the graph made are according to the column you put in that graph using the right side menu 
+- you can also make new field or new column in data by clicking the add a field button present at downward side in rightside menu and add calculated field, then by the its syntax you can see from google , using that you can create new field like , pick_location so name a field as this , and then in formula use "CONCAT(pickup_latitude,",",pickup_longitude)" as per its syntax for value in this new column
+- Add a google map chart and add control field as pick_location, then click the edit button -> in type-> go to geo-> go to latitude and longitude -> then by blue point you can see the pickup location , you can also zoom in or zoom out the map ,and after this you can also add color dimension as rate_code_name which will show the bubble of different color on map according to differnt rate_code_name value
+-we can also display different charts in this in same way as before
+
+- explore the edit(like how to change the name in dashboard of anything, how to show avg , max, median) ,style tab by yourself
+
+BAR CHART-> X AXIS DEFINE KARDO THEN , Y AXIS KA COLUMN KA AVG, SUM,MEAN OR ANY OTHER THING FOR EACH VALUE OF X AXIS
+
+
+Resource
+https://youtu.be/WpQECq5Hx9g?si=QwOWc5BXdnwISCyw
+
+Wheever causing error once see for the terminal of virtual machine is working , or any error come there -> then solve that problem accordingly
+
+When you again start the terminal of virtual maachine -> start merge
+and before all this refresh the page of mage and then go to particular pipeline and then always run all the block of code in mage above it before running any block of code
+
+Whenever you want to access the same mage of tree , make sure you work on same virtual machine or instance on which you are working before and make sure you start the mage with same project name which contain that tree of block of code 
+
+On starting the mage sometime happen that mage ui open different port other than 6789 , get this by seeing the terminal of window of virtual machine like sometime 6790 then open the mage ui by istance_public_ip:6790 and also change the rule of firewall so that instance can accept the request from this port
+
+LEARN HOW TO DESIGN ANY DASHBOARD BY YOURSELF
+
+IN THIS PROJECT WE HAVE DONE BOTH DATA ENGINEERING , DATA SCIENTIST MACHINE LEARNING ENGINEER FOR CREATING THE DASHBOARD

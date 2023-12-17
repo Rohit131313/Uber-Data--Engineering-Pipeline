@@ -35,5 +35,3 @@ More info about dataset can be found here:
 ## Data Model
 <img src="Data Model.png">
 
-## Complete Video Tutorial 
-Video Link - https://youtu.be/WpQECq5Hx9g

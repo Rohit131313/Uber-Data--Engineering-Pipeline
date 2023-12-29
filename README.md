@@ -35,3 +35,5 @@ More info about dataset can be found here:
 ## Data Model
 <img src="Data Model.png">
 
+## Project Demo
+Watch a video demonstration of how the project runs [here](https://www.veed.io/view/3dd1ce2b-12ff-4a11-b47f-780a9df6a423?panel=share).

@@ -35,5 +35,8 @@ More info about dataset can be found here:
 Platform used to create data model - Lucidchart
 <img src="Data Model.png">
 
+## Dashboard
+<img src="Uber_data_dashboard.png">
+
 ## Project Demo
 Watch a video demonstration of how the project runs [here](https://veed.io/view/4e5fc891-c692-4418-b076-45a9b23cef8d).
